@@ -20,15 +20,32 @@ rl.on('line', (data)=>{
       process.exit();     
     };
 
-   fs.writeFile(
-      path.join(__dirname, 'name.txt'),
-      `${dataStr}`,
-      (err) => {
-         if (err) throw err;
-         stdout.write(`Hello ${dataStr}, your name write in file \n`);
-          }
-   )
-   
+   fs.access(path.join(__dirname, 'name.txt'), function(error){
+      if (error) {
+          console.log("File be create");
+          
+         fs.writeFile(
+            path.join(__dirname, 'name.txt'),
+            `${dataStr}\n`,
+            (err) => {
+               if (err) throw err;
+               stdout.write(`Hello ${dataStr}, your name write in file \n`);
+                }
+         )
+      } 
+
+      if(!error) {
+         fs.appendFile(
+            path.join(__dirname, 'name.txt'),
+            `${dataStr}\n`,
+            (err) => {
+               if (err) throw err;
+               stdout.write(`Hello ${dataStr}, your name write in file \n`);
+                }
+         )
+      }
+   });
+
 })
 
 
